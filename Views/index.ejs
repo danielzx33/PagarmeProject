@@ -5,11 +5,101 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
 </head>
 <body>
 
-    <h1>top de mais</h1>
+    <div class="container">
+        <form>
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                    <label for="customerName">Nome</label>
+                    <input type="text" class="form-control" id="customerName">
+                </div> 
+
+                <div class="form-group col-md-6">
+                    <label for="customerEmail">Email</label>
+                    <input type="email" class="form-control" id="customerEmail">
+                </div>
+                       
+            </div>
+            <!-- end row -->
+            <div class="form-row">
+
+                <div class="form-group col-md-4">   
+                    <label for="customerDocumentNum">Numero do Documento</label>
+                    <input type="email" class="form-control" id="customerDocumentNum">
+                </div>
+
+                <div class="form-group col-md-4">   
+                    <label for="customerPhone">Telefone</label>
+                    <input type="text" name="custTel"  class="form-control" id="customerPhone">
+                </div>
+
+                <div class="form-group col-md-4">   
+                     <label for="customerBirthday">Ano de Nascimento</label>
+                    <input type="date" class="form-control" id="customerBirthday">
+                 </div>
+                
+            </div>
+            <!-- end row -->
+            <h3>Dados para Envio</h3>
+            <div class="form-row">
+
+                    <!-- name: "Neo Reeves",
+                    fee: "1000",
+                    delivery_date: "2002-12-21",
+                    expedited: true,
+                    address: {
+                      country: "br",
+                      state: "sp",
+                      city: "Cotia",
+                      neighborhood: "Rio Cotia",
+                      street: "Rua Matrix",
+                      street_number: "9999",
+                      zipcode: "06714360" -->
+                      <div class="form-group col-md-6">
+                            <label for="shippingName">Nome do recebedor</label>
+                            <input type="text" class="form-control" id="shippingName">
+                        </div> 
+        
+                        <div class="form-group col-md-6">
+                            <label for="shippingEmail">Email Recebedor</label>
+                            <input type="email" class="form-control" id="shippingEmail">
+                        </div>
+                               
+                    </div>
+                    <!-- end row -->
+                    <div class="form-row">
+        
+                        <div class="form-group col-md-4">   
+                            <label for="shippingContry">Estado</label>
+                            <select name="" id="shippingContry" class="form-control">
+                                <option value="sp">São Paulo</option>
+                                <option value="mg">Minas Gerais</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4">   
+                                <label for="shippingCity">Cidade</label>
+                                <select name="" id="shippingCity" class="form-control">
+                                    <option value="cidadeA">Cidade A</option>
+                                    <option value="CidadeB">Cidade B</option>
+                                </select>
+                         </div>
+
+                         <div class="form-group col-md-4">   
+                                <label for="shippingZipcode">Cep</label>
+                                <input type="text" class="form-control" id="shippingZipcode">
+                         </div>
+                    
+            </div>
+                
+        </form>
+
+    </div>
     
 </body>
 </html>
