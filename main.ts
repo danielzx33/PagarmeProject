@@ -7,14 +7,15 @@ import path from "path";
 
 const server = express();
 server.set("view engine", 'ejs');
-server.use(express.static(path.join(__dirname , "Js")))
+// server.use(express.static(path.join(__dirname , "Js")))
+server.use('/assets', express.static("Js"));
 
 server.get("/", (req, res, next) =>{
     res.render("index")
 });
 
-server.get("/teste", (req, res, next) =>{
-    res.render("teste")
+server.post("/comprar", (req, res, next) =>{
+    res.send("krl maluco")
 });
 
 server.listen(3000,()=>{
