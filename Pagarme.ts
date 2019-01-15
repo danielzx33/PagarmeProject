@@ -2,23 +2,6 @@
 
 import pagarme from 'pagarme'
 
-// export var run = pagarme.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
-//   .then(client => client.transactions.create({
-//     amount: 1000,
-//     payment_method: 'boleto',
-//     postback_url: 'http://requestb.in/pkt7pgpk',
-//     customer: {
-//       type: 'individual',
-//       country: 'br',
-//       name: 'Aardvark Silva',
-//       documents: [
-//         {
-//           type: 'cpf',
-//           number: '00000000000',
-//         },
-//       ],
-//     },
-//   }))
 export var run = pagarme.client.connect({api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa'})
         .then(client => client.transactions.create({
 

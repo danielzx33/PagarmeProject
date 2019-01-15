@@ -1,4 +1,4 @@
- export class card{
+ export class Card{
 
     public card_number: string;
     public card_cvv: string;

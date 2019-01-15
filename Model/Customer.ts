@@ -1,3 +1,5 @@
+import { Document } from "./Documents";
+
 export class Customer{
     
     public external_id: string;
@@ -5,9 +7,8 @@ export class Customer{
     public type: string;
     public country: string;
     public email: string;
-    public document_type: string;
-    public document_num: string;
-    public phone_number: string[];
+    public documents: Document[];
+    public phone_numbers: string[];
     public birthday: string;
 
 
