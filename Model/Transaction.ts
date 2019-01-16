@@ -3,6 +3,7 @@ import { Billing } from "./Billing";
 import { Shipping } from "./Shipping";
 import { Item } from "./Item";
 import { Card } from "./Card";
+import { SplitRule } from "./SplitRule";
 
 export class Transaction {
     amount:String;
@@ -14,8 +15,9 @@ export class Transaction {
     billing:Billing ;
     shipping:Shipping;
     items:Item[];
+    split_rules: SplitRule [];
 
-    constructor(cust: Customer, ship: Shipping, item: Item, billing :Billing, card:Card ){
+    constructor(cust: Customer, ship: Shipping, item: Item, billing :Billing, card:Card, split:SplitRule[] ){
         this.amount = ((parseInt( item.unit_price)
                          * parseInt(item.quantity))
                          + parseInt(ship.fee)).toString();
@@ -26,7 +28,8 @@ export class Transaction {
         this.customer = cust;
         this.billing = billing;
         this.shipping = ship;
-        this.items = [item]
+        this.items = [item];
+        this.split_rules = split
     }
      
 }

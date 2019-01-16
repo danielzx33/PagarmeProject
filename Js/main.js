@@ -8,6 +8,7 @@ const pagarme_1 = __importDefault(require("pagarme"));
 const path_1 = __importDefault(require("path"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const Transaction_1 = require("./Model/Transaction");
+const CompanyBalance_1 = require("./Script/CompanyBalance");
 //config server
 const server = express_1.default();
 server.set("view engine", "ejs");
@@ -72,20 +73,22 @@ server.post("/comprar", (req, res, next) => {
         unit_price: finalItem.UnitValue.toString(),
         id: finalItem.id.toString()
     };
-    let transaction = new Transaction_1.Transaction(cust, ship, item, billing, card);
-    console.log(JSON.stringify(cust));
-    console.log(JSON.stringify(item));
-    console.log(JSON.stringify(card));
-    console.log(JSON.stringify(billing));
-    console.log(JSON.stringify(ship));
+    let Split = [
+        { recipient_id: "re_cjqz7w03c015ojw6ffot0tdod", charge_processing_fee: true, liable: true, percentage: 30 },
+        { recipient_id: "re_cjqtnw06c00i5v86edkmmlwzw", charge_processing_fee: true, liable: false, percentage: 70 }
+    ];
+    let transaction = new Transaction_1.Transaction(cust, ship, item, billing, card, Split);
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
-            .then(client => client.transactions.create(transaction)).then(tran => console.log(tran)).catch(erro => console.log(erro.response.errors));
+            .then(client => client.transactions.create(transaction))
+            .then(a => res.send(a))
+            .catch(erro => console.log(erro.response.errors));
     }
     catch (error) {
-        console.log();
+        console.log("catch", error);
     }
-    res.send(JSON.stringify(transaction));
+    CompanyBalance_1.getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e));
+    CompanyBalance_1.getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e));
 });
 server.listen(3000, () => {
     console.log("rodando!");
