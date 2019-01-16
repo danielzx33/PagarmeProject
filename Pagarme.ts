@@ -1,5 +1,4 @@
 
-
 import pagarme from 'pagarme'
 
 export var run = pagarme.client.connect({api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa'})

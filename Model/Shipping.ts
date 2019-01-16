@@ -4,7 +4,7 @@ export class Shipping{
    
     public name: string;
     public fee: string;
-    public Address: Address;
+    public address: Address;
  public delivery_date: string;
  public expedited: boolean;
     // public country: string;

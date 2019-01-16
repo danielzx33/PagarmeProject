@@ -11,9 +11,10 @@ const Transaction_1 = require("./Model/Transaction");
 //config server
 const server = express_1.default();
 server.set("view engine", "ejs");
-server.set("/views", path_1.default.join(__dirname + "Views"));
-server.use("/asset", express_1.default.static(__dirname + "/"));
+server.set("views", path_1.default.join(__dirname, "/Views"));
+server.use(express_1.default.static(__dirname));
 server.use(body_parser_1.default.urlencoded({ extended: true }));
+console.log(path_1.default.join(__dirname, "/doidoa"));
 //end config
 server.get("/", (req, res, next) => {
     res.render("index");
@@ -23,7 +24,7 @@ server.post("/comprar", (req, res, next) => {
     let cust = {
         external_id: "0002",
         name: req.body.custName,
-        type: "Individual",
+        type: "individual",
         country: "br",
         email: req.body.custEmail,
         documents: [{
@@ -47,7 +48,7 @@ server.post("/comprar", (req, res, next) => {
         fee: "100",
         delivery_date: new Date().toISOString().substr(0, 10),
         expedited: true,
-        Address: multiAdress
+        address: multiAdress
     };
     let billing = {
         name: req.body.shipName,
@@ -72,17 +73,17 @@ server.post("/comprar", (req, res, next) => {
         id: finalItem.id.toString()
     };
     let transaction = new Transaction_1.Transaction(cust, ship, item, billing, card);
-    // console.log(JSON.stringify(cust))
-    // console.log(JSON.stringify(item))
-    // console.log(JSON.stringify(card))
-    // console.log(JSON.stringify(billing))
-    // console.log(JSON.stringify(ship))
+    console.log(JSON.stringify(cust));
+    console.log(JSON.stringify(item));
+    console.log(JSON.stringify(card));
+    console.log(JSON.stringify(billing));
+    console.log(JSON.stringify(ship));
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
-            .then(client => client.transactions.create(JSON.stringify(transaction)));
+            .then(client => client.transactions.create(transaction)).then(tran => console.log(tran)).catch(erro => console.log(erro.response.errors));
     }
     catch (error) {
-        console.log(error);
+        console.log();
     }
     res.send(JSON.stringify(transaction));
 });

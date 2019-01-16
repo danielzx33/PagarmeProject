@@ -16,10 +16,10 @@ import { Card } from "./Model/Card";
 //config server
 const server = express();
 server.set("view engine", "ejs");
-server.set("/views", path.join(__dirname +"Views" ))
-server.use("/asset",express.static(__dirname +"/"));
+server.set("views", path.join(__dirname ,"/Views" ))
+server.use(express.static(__dirname));
 server.use(bodyParser.urlencoded({extended: true}));
-
+console.log(path.join(__dirname , "/doidoa" ))
 
 //end config
 
@@ -35,7 +35,7 @@ server.post("/comprar", (req, res, next) =>{
     let cust: Customer = {
         external_id: "0002",
         name: req.body.custName,
-        type: "Individual",
+        type: "individual",
         country : "br",
         email: req.body.custEmail,
         documents:[ {
@@ -61,7 +61,7 @@ server.post("/comprar", (req, res, next) =>{
         fee: "100",    
         delivery_date: new Date().toISOString().substr(0,10),
         expedited: true,
-        Address: multiAdress
+        address: multiAdress
     }
 
     let billing:Billing = {
@@ -96,24 +96,25 @@ server.post("/comprar", (req, res, next) =>{
 
 
 
-    // console.log(JSON.stringify(cust))
-    // console.log(JSON.stringify(item))
-    // console.log(JSON.stringify(card))
-    // console.log(JSON.stringify(billing))
-    // console.log(JSON.stringify(ship))
+    console.log(JSON.stringify(cust))
+    console.log(JSON.stringify(item))
+    console.log(JSON.stringify(card))
+    console.log(JSON.stringify(billing))
+    console.log(JSON.stringify(ship))
 
     try {
         
-        
         pagarme.client.connect({api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa'})
-        .then(client => client.transactions.create(JSON.stringify(transaction)))
+        .then(client => client.transactions.create(transaction)).then(tran => console.log(tran)).catch(erro =>
+            console.log(erro.response.errors))
+            
         
-    } catch (error) {
-        console.log(error)
+    }catch (error) {
+        console.log()
     }
     res.send(JSON.stringify(transaction))
-});
-
+ });
+    
 server.listen(3000,()=>{
     console.log("rodando!")
 });
