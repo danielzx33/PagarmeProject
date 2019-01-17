@@ -19,5 +19,20 @@ $(document).ready(() => {
     $("#itemQuantity").change(() => {
         productCalc();
     });
+    $("#paymentType").change(() => {
+        if ($("#paymentType").val() === "0") {
+            let b = $("#card-row .form-control");
+            console.log(b);
+            for (let val in b) {
+                console.log($(val));
+            }
+            $("#card-row").hide();
+            console.log($("#card-row"));
+            console.log("olhao bot");
+        }
+        else {
+            $("#card-row").show();
+        }
+    });
 });
 //# sourceMappingURL=mainScript.js.map

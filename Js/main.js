@@ -45,10 +45,9 @@ server.post("/comprar", (req, res, next) => {
     let billing = new Billing_1.Billing(req.body, multiAdress);
     let card = new Card_1.Card(req.body);
     let item = new Item_1.Item(req.body, finalItem);
-    console.log(req.body.cardNumber, req.body.cardCvv, req.body.cardExpiration, req.body.cardName);
-    console.log("======================" + req.body);
     //-------create transaction--------//
     let transaction = new Transaction_1.Transaction(cust, ship, item, billing, card, Split);
+    //--------run transaction------//
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
