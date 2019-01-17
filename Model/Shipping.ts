@@ -1,19 +1,22 @@
 import { Address } from "./adress";
 
-export class Shipping{
-   
+export class Shipping {
+
     public name: string;
     public fee: string;
     public address: Address;
- public delivery_date: string;
- public expedited: boolean;
-    // public country: string;
-    // public state: string;
-    // public city: string;
-    // public neighborhood: string;
-    // public street: string;
-    // public street_num: string;
-    // public zipcode: string;
-   
-   
+    public delivery_date: string;
+    public expedited: boolean;
+
+
+    constructor(body, multiAdress){
+        this.name = body.shipName,
+        this.fee = "100",    
+        this.delivery_date = new Date().toISOString().substr(0,10),
+        this.expedited = true,
+        this.address = multiAdress
+    }
+
+
+
 }

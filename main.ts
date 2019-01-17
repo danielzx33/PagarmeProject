@@ -1,6 +1,5 @@
 import express from "express";
-import {run  } from "./Pagarme";
-import  pagarme from "pagarme";
+import pagarme from "pagarme";
 import path from "path";
 import bodyParser from "body-parser";
 import { Customer } from "./Model/Customer";
@@ -11,119 +10,66 @@ import { Billing } from "./Model/Billing";
 import { Address } from "./Model/adress";
 import { Card } from "./Model/Card";
 import { SplitRule } from "./Model/SplitRule";
-import * as https from "https";
-import {getBalanceById} from './Script/CompanyBalance'
+import { getBalanceById } from './Script/CompanyBalance'
 
 
 
-//config server
+//------config server
 const server = express();
 server.set("view engine", "ejs");
-server.set("views", path.join(__dirname ,"/Views" ))
+server.set("views", path.join(__dirname, "/Views"))
 server.use(express.static(__dirname));
-server.use(bodyParser.urlencoded({extended: true}));
-console.log(path.join(__dirname , "/doidoa" ))
+server.use(bodyParser.urlencoded({ extended: true }));
+//-----end config
 
-//end config
-
-
-server.get("/", (req, res, next) =>{
+//-----Home page
+server.get("/", (req, res, next) => {
     res.render("index");
-    
+
 });
 
-server.post("/comprar", (req, res, next) =>{
+server.post("/comprar", (req, res, next) => {
 
-///--------init values for transaction----////
-    let cust: Customer = {
-        external_id: "0002",
-        name: req.body.custName,
-        type: "individual",
-        country : "br",
-        email: req.body.custEmail,
-        documents:[ {
-            number: req.body.custCpf,
-            type: "cpf"
-        }],
-        birthday: req.body.custBirthday,
-        phone_numbers: [("+55"+req.body.custPhone)]
-        
-    }
-    
-    let multiAdress: Address = {
-        country: "br" ,
-        state: req.body.shipState,
-        city: req.body.shipCity,
-        neighborhood: req.body.shipNeighborhood,
-        street: req.body.shipStreet,
-        street_number: req.body.shipStreetNum,
-        zipcode: req.body.shipZipcode,
-    }
-    let ship: Shipping = {
-        name: req.body.shipName,
-        fee: "100",    
-        delivery_date: new Date().toISOString().substr(0,10),
-        expedited: true,
-        address: multiAdress
-    }
-
-    let billing:Billing = {
-        name: req.body.shipName,
-        address: multiAdress
-    }
-
-    let card: Card = {
-    card_number: "4111111111111111",
-    card_cvv: "123",
-    card_expiration_date: "0922",
-    card_holder_name: 'daniel'
-    }
-
-      
+    // -----Fake db to find item
     const itens = [
-        { id: 1234, name: "Zanpakutou", UnitValue: 20000},
-        { id: 2345, name: "Chapeu de Palha", UnitValue: 5000}
-      ];
-
-    let finalItem = itens.find(e => e.id == parseInt(req.body.itemName))
-      
-    let item: Item = {
-        quantity: req.body.itemQuantity,
-        title: finalItem.name,
-        tangible: true,
-        unit_price: finalItem.UnitValue.toString(),
-        id: finalItem.id.toString()
-    }
-
+        { id: 1234, name: "Zanpakutou", UnitValue: 20000 },
+        { id: 2345, name: "Chapeu de Palha", UnitValue: 5000 }
+    ];
     let Split: SplitRule[] = [
-        { recipient_id:"re_cjqz7w03c015ojw6ffot0tdod", charge_processing_fee: true, liable: true, percentage: 30 },
-        { recipient_id:"re_cjqtnw06c00i5v86edkmmlwzw", charge_processing_fee: true, liable: false, percentage: 70 }
+        { recipient_id: "re_cjqz7w03c015ojw6ffot0tdod", charge_processing_fee: true, liable: true, percentage: 30 },
+        { recipient_id: "re_cjqtnw06c00i5v86edkmmlwzw", charge_processing_fee: true, liable: false, percentage: 70 }
     ]
 
-    
-
-    let transaction: Transaction = new Transaction(cust,ship, item, billing,card, Split);
-
+    //-------select item
+    let finalItem = itens.find(e => e.id == parseInt(req.body.itemName))
 
 
+    ///--------init values for transaction----////
+    let cust = new Customer(req.body)
+    let multiAdress = new Address(req.body)
+    let ship: Shipping = new Shipping(req.body, multiAdress)
+    let billing: Billing = new Billing(req.body, multiAdress);
+    let card: Card = new Card(req.body);
+    let item: Item = new Item(req.body, finalItem)
 
+    //-------create transaction--------//
+    let transaction: Transaction = new Transaction(cust, ship, item, billing, card, Split);
+
+    //--------run transaction------//
     try {
-        
-        pagarme.client.connect({api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa'})
-        .then(client => client.transactions.create(transaction))
-        .then(a => res.send(a))
-        .catch(erro => console.log(erro.response.errors));
+        pagarme.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
+            .then(client => client.transactions.create(transaction))
+            .then(a => res.send(a))
+            .catch(erro => console.log(erro.response.errors));
+        getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e))
+        getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e))
 
-    }catch (error) {
-        console.log("catch",error);
+    } catch (error) {
+        console.log("catch", error);
     }
-    getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e))
-    getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e))
- 
-    
+
 });
-    
-server.listen(3000,()=>{
-    console.log("rodando!")
+
+server.listen(3000, () => {
+    console.log(`Serviço online!`)
 });
-    

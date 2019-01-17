@@ -7,90 +7,61 @@ const express_1 = __importDefault(require("express"));
 const pagarme_1 = __importDefault(require("pagarme"));
 const path_1 = __importDefault(require("path"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const Customer_1 = require("./Model/Customer");
+const Shipping_1 = require("./Model/Shipping");
+const Item_1 = require("./Model/Item");
 const Transaction_1 = require("./Model/Transaction");
+const Billing_1 = require("./Model/Billing");
+const adress_1 = require("./Model/adress");
+const Card_1 = require("./Model/Card");
 const CompanyBalance_1 = require("./Script/CompanyBalance");
-//config server
+//------config server
 const server = express_1.default();
 server.set("view engine", "ejs");
 server.set("views", path_1.default.join(__dirname, "/Views"));
 server.use(express_1.default.static(__dirname));
 server.use(body_parser_1.default.urlencoded({ extended: true }));
-console.log(path_1.default.join(__dirname, "/doidoa"));
-//end config
+//-----end config
+//-----Home page
 server.get("/", (req, res, next) => {
     res.render("index");
 });
 server.post("/comprar", (req, res, next) => {
-    ///--------init values for transaction----////
-    let cust = {
-        external_id: "0002",
-        name: req.body.custName,
-        type: "individual",
-        country: "br",
-        email: req.body.custEmail,
-        documents: [{
-                number: req.body.custCpf,
-                type: "cpf"
-            }],
-        birthday: req.body.custBirthday,
-        phone_numbers: [("+55" + req.body.custPhone)]
-    };
-    let multiAdress = {
-        country: "br",
-        state: req.body.shipState,
-        city: req.body.shipCity,
-        neighborhood: req.body.shipNeighborhood,
-        street: req.body.shipStreet,
-        street_number: req.body.shipStreetNum,
-        zipcode: req.body.shipZipcode,
-    };
-    let ship = {
-        name: req.body.shipName,
-        fee: "100",
-        delivery_date: new Date().toISOString().substr(0, 10),
-        expedited: true,
-        address: multiAdress
-    };
-    let billing = {
-        name: req.body.shipName,
-        address: multiAdress
-    };
-    let card = {
-        card_number: "4111111111111111",
-        card_cvv: "123",
-        card_expiration_date: "0922",
-        card_holder_name: 'daniel'
-    };
+    // -----Fake db to find item
     const itens = [
         { id: 1234, name: "Zanpakutou", UnitValue: 20000 },
         { id: 2345, name: "Chapeu de Palha", UnitValue: 5000 }
     ];
-    let finalItem = itens.find(e => e.id == parseInt(req.body.itemName));
-    let item = {
-        quantity: req.body.itemQuantity,
-        title: finalItem.name,
-        tangible: true,
-        unit_price: finalItem.UnitValue.toString(),
-        id: finalItem.id.toString()
-    };
     let Split = [
         { recipient_id: "re_cjqz7w03c015ojw6ffot0tdod", charge_processing_fee: true, liable: true, percentage: 30 },
         { recipient_id: "re_cjqtnw06c00i5v86edkmmlwzw", charge_processing_fee: true, liable: false, percentage: 70 }
     ];
+    //-------select item
+    let finalItem = itens.find(e => e.id == parseInt(req.body.itemName));
+    ///--------init values for transaction----////
+    let cust = new Customer_1.Customer(req.body);
+    let multiAdress = new adress_1.Address(req.body);
+    let ship = new Shipping_1.Shipping(req.body, multiAdress);
+    let billing = new Billing_1.Billing(req.body, multiAdress);
+    let card = new Card_1.Card(req.body);
+    let item = new Item_1.Item(req.body, finalItem);
+    console.log(req.body.cardNumber, req.body.cardCvv, req.body.cardExpiration, req.body.cardName);
+    console.log("======================" + req.body);
+    //-------create transaction--------//
     let transaction = new Transaction_1.Transaction(cust, ship, item, billing, card, Split);
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
             .then(a => res.send(a))
             .catch(erro => console.log(erro.response.errors));
+        CompanyBalance_1.getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e));
+        CompanyBalance_1.getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e));
     }
     catch (error) {
         console.log("catch", error);
     }
-    CompanyBalance_1.getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e));
-    CompanyBalance_1.getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e));
 });
 server.listen(3000, () => {
-    console.log("rodando!");
+    console.log(`Serviço online!`);
 });
 //# sourceMappingURL=main.js.map
