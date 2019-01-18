@@ -5,12 +5,13 @@ import bodyParser from "body-parser";
 import { Customer } from "./Model/Customer";
 import { Shipping } from "./Model/Shipping";
 import { Item } from "./Model/Item";
-import { Transaction } from "./Model/Transaction";
+import { CardTransation } from "./Model/CardTransaction";
 import { Billing } from "./Model/Billing";
 import { Address } from "./Model/adress";
 import { Card } from "./Model/Card";
 import { SplitRule } from "./Model/SplitRule";
 import { getBalanceById } from './Script/CompanyBalance'
+import {Transaction} from "./Model/Transaction"
 
 
 
@@ -52,8 +53,17 @@ server.post("/comprar", (req, res, next) => {
     let card: Card = new Card(req.body);
     let item: Item = new Item(req.body, finalItem)
 
+    let transaction:Transaction
+    let transType = req.body.paymentType;
+
     //-------create transaction--------//
-    let transaction: Transaction = new Transaction(cust, ship, item, billing, card, Split);
+    if(transType == "boleto"){
+
+         transaction = new Transaction(cust, ship, item, billing, Split, transType);
+    }else{
+
+         transaction = new CardTransation(cust, ship, item, billing, Split, card, transType);
+    }
 
     //--------run transaction------//
     try {
@@ -61,6 +71,8 @@ server.post("/comprar", (req, res, next) => {
             .then(client => client.transactions.create(transaction))
             .then(a => res.send(a))
             .catch(erro => console.log(erro.response.errors));
+        
+        //Retorna o Balanço
         getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e))
         getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e))
 

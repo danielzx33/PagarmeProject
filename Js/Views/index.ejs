@@ -51,7 +51,7 @@
                 <div class="form-group col-md-6">
                     <label for="customerName">Nome</label>
                     <input type="text" class="form-control" id="customerName" name="custName" pattern="^[a-zA-z][a-zA-Z\s]{4,}"
-                        title="Apenas Letras e no minimo de 5" placeholder="Exemplo: Goku Santos" required>
+                        title="Apenas Letras e no minimo de 5" placeholder="Ex:: Goku Santos" required>
                 </div>
 
                 <div class="form-group col-md-6">
@@ -67,7 +67,7 @@
                 <div class="form-group col-md-4">
                     <label for="customerDocumentNum">Numero do CPF</label>
                     <input type="text" class="form-control" id="customerDocumentNum" name="custCpf" pattern="^\d{11}$"
-                        title="Insira um Cpf Valido sem - ou ." placeholder="Ex:12345678912 ou 123456789x" required>
+                        title="Insira um Cpf Valido sem - ou ." placeholder="Ex:12345678912" required>
                 </div>
 
                 <div class="form-group col-md-4">
@@ -89,13 +89,8 @@
                 <div class="form-group col-md-6">
                     <label for="shippingName">Nome do recebedor</label>
                     <input type="text" class="form-control" id="shippingName" name="shipName" pattern="^[a-zA-z][a-zA-Z\s]{4,}"
-                        title="Apenas Letras e no minimo de 5" placeholder="Exemplo: Goku Santos" required>
+                        title="Apenas Letras e no minimo de 5" placeholder="Ex:: Goku Santos" required>
                 </div>
-
-                <!-- <div class="form-group col-md-6">
-                    <label for="shippingEmail">Email Recebedor</label>
-                    <input type="email" class="form-control" id="shippingEmail" name="shipEmail">
-                </div> -->
 
             </div>
             <!-- end row -->
@@ -152,38 +147,38 @@
                 <div class="form-group col-md-3">
                 <label for="paymentType">Método de Pagamento</label>
                 <select name="paymentType" id="paymentType" class="form-control">
-                    <option value="0">Boleto</option>
-                    <option value="1">Cartão de Créditdo</option>
+                    <option value="boleto">Boleto</option>
+                    <option value="credit_card">Cartão de Créditdo</option>
                 </select>
                 </div>
             </div>
 
 
-            <div class="form-row" id="card-row">
+            <div class="form-row" id="card-row" style="display: none;">
                 
 
                 <div class="form-group col-md-3">
                     <label for="cardNumber">Número do Cartão</label>
                     <input type="text" class="form-control" id="cardNumber" name="cardNumber" title="O número não deve conter espaços" placeholder="Ex: 1234567890123456"
-                     pattern="^[0-9]{16}$"   required>
+                     pattern="^[0-9]{16}$"   >
                 </div>
 
                 <div class="form-group col-md-3">
                     <label for="cardCvv">CVV</label>
-                    <input type="text" class="form-control" id="cardCvv" name="cardCvv" pattern="^\n{3}$"
-                        title="O número não deve conter espaços" placeholder="Ex: 123" required>
+                    <input type="text" class="form-control" id="cardCvv" name="cardCvv" pattern="^\d{3}$"
+                        title="O número não deve conter espaços" placeholder="Ex: 123" >
                 </div>
 
                 <div class="form-group col-md-3">
                     <label for="cardExpiration">Data de Expiração do cartão</label>
-                    <input type="text" class="form-control" id="cardExpiration" name="cardExpiration" pattern="[0-1][1-2]\d{2}"
-                        title="Digite apenas numeros sem espaço ou '/'" placeholder="0624" required>
+                    <input type="text" class="form-control" id="cardExpiration" name="cardExpiration" pattern="[0-1][0-9]\d{2}"
+                        title="Digite apenas numeros sem espaço ou '/'" placeholder="0624" >
                 </div>
 
                 <div class="form-group col-md-3">
                     <label for="cardName">Nome no Cartão</label>
                     <input type="text" class="form-control" id="cardName" name="cardName" pattern="^[a-zA-z][a-zA-Z\s]{4,}"
-                        title="Apenas Letras e no minimo de 5" placeholder="Exemplo: Goku Santos" required>
+                        title="Apenas Letras e no minimo de 5" placeholder="Ex: Goku Santos" >
                 </div>
 
             </div>

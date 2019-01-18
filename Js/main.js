@@ -10,11 +10,12 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const Customer_1 = require("./Model/Customer");
 const Shipping_1 = require("./Model/Shipping");
 const Item_1 = require("./Model/Item");
-const Transaction_1 = require("./Model/Transaction");
+const CardTransaction_1 = require("./Model/CardTransaction");
 const Billing_1 = require("./Model/Billing");
 const adress_1 = require("./Model/adress");
 const Card_1 = require("./Model/Card");
 const CompanyBalance_1 = require("./Script/CompanyBalance");
+const Transaction_1 = require("./Model/Transaction");
 //------config server
 const server = express_1.default();
 server.set("view engine", "ejs");
@@ -45,14 +46,22 @@ server.post("/comprar", (req, res, next) => {
     let billing = new Billing_1.Billing(req.body, multiAdress);
     let card = new Card_1.Card(req.body);
     let item = new Item_1.Item(req.body, finalItem);
+    let transaction;
+    let transType = req.body.paymentType;
     //-------create transaction--------//
-    let transaction = new Transaction_1.Transaction(cust, ship, item, billing, card, Split);
+    if (transType == "boleto") {
+        transaction = new Transaction_1.Transaction(cust, ship, item, billing, Split, transType);
+    }
+    else {
+        transaction = new CardTransaction_1.CardTransation(cust, ship, item, billing, Split, card, transType);
+    }
     //--------run transaction------//
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
             .then(a => res.send(a))
             .catch(erro => console.log(erro.response.errors));
+        //Retorna o Balanço
         CompanyBalance_1.getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e));
         CompanyBalance_1.getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e));
     }

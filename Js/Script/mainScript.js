@@ -6,8 +6,9 @@ const itens = [
 $(document).ready(() => {
     const productCalc = () => {
         let quantity = $("#itemQuantity").val();
-        let item = itens.find(e => e.id == $("#itemName").val().valueOf());
-        if ((quantity.valueOf() != 0 && quantity.valueOf() > 0)) {
+        let name = ($("#itemName").val() == null) ? 0 : $("#itemName").val();
+        let item = itens.find(e => e.id == name);
+        if ((quantity != 0 && name != 0)) {
             $("#itemCalc").val(((item.UnitValue * quantity) / 100).toFixed(2));
             return;
         }
@@ -20,18 +21,14 @@ $(document).ready(() => {
         productCalc();
     });
     $("#paymentType").change(() => {
-        if ($("#paymentType").val() === "0") {
-            let b = $("#card-row .form-control");
-            console.log(b);
-            for (let val in b) {
-                console.log($(val));
-            }
-            $("#card-row").hide();
-            console.log($("#card-row"));
-            console.log("olhao bot");
+        if ($("#paymentType").val() === "credit_card") {
+            $("#card-row").show();
+            $("#card-row .form-control").attr("required", "true");
         }
         else {
-            $("#card-row").show();
+            console.log("nem entra");
+            $("#card-row .form-control").removeAttr("required");
+            $("#card-row").hide();
         }
     });
 });
