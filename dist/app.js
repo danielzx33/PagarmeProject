@@ -12,7 +12,7 @@ const Shipping_1 = require("./Model/Shipping");
 const Item_1 = require("./Model/Item");
 const CardTransaction_1 = require("./Model/CardTransaction");
 const Billing_1 = require("./Model/Billing");
-const adress_1 = require("./Model/adress");
+const Adress_1 = require("./Model/Adress");
 const Card_1 = require("./Model/Card");
 const CompanyBalance_1 = require("./Script/CompanyBalance");
 const Transaction_1 = require("./Model/Transaction");
@@ -42,7 +42,7 @@ app.post("/finalizarCompra", (req, res, next) => {
     let finalItem = itens.find(e => e.id == parseInt(req.body.itemName));
     ///--------init values for transaction----////
     let cust = new Customer_1.Customer(req.body);
-    let multiAdress = new adress_1.Address(req.body);
+    let multiAdress = new Adress_1.Address(req.body);
     let ship = new Shipping_1.Shipping(req.body, multiAdress);
     let billing = new Billing_1.Billing(req.body, multiAdress);
     let card = new Card_1.Card(req.body);
@@ -60,7 +60,6 @@ app.post("/finalizarCompra", (req, res, next) => {
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
-            .then(a => console.log(a))
             .catch(error => console.log(error));
     }
     catch (error) {

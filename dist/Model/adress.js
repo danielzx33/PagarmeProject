@@ -12,4 +12,4 @@ class Address {
     }
 }
 exports.Address = Address;
-//# sourceMappingURL=adress.js.map
+//# sourceMappingURL=Adress.js.map

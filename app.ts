@@ -71,7 +71,6 @@ app.post("/finalizarCompra", (req, res, next) => {
 
         pagarme.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
-            .then(a => console.log(a))
             .catch(error => console.log(error));
 
 
@@ -83,14 +82,14 @@ app.post("/finalizarCompra", (req, res, next) => {
     //Retorna o Balanço
 
     let companiesBalance: any[2] = new Array();
-    
+
     getBalanceById(Split[0].recipient_id).then(Company => {
         companiesBalance.push(Company)
     }).then(() => {
         getBalanceById(Split[1].recipient_id).then(Company => {
             companiesBalance.push(Company)
-        }).then(() => {   
-            res.render("Companies",{companies:companiesBalance })
+        }).then(() => {
+            res.render("Companies", { companies: companiesBalance })
         })
     }).catch(e => console.log(e))
 
