@@ -9,10 +9,6 @@ export class Transaction{
     
     amount:String;
     payment_method: string;
-    // card_number:string;
-    // card_cvv:string;
-    // card_expiration_date:string;
-    // card_holder_name:string;
     customer:Customer; 
     billing:Billing ;
     shipping:Shipping;

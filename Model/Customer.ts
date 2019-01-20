@@ -10,6 +10,7 @@ export class Customer{
     public documents: Document[];
     public phone_numbers: string[];
     public birthday: string;
+    
 
 
     constructor(body){

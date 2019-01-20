@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    
+    <style>
+    h3{
+        text-align: center;
+    }
+    .row{
+        align-content: center;
+        margin-top: 120px;
+    }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <%let companyNum = 1 %>
+            <%for(let company of companies) {%>
+
+            <div class="col-md-3">
+
+                <div class="companies" id="company<%=companyNum%>">
+                    <h3>Empresa
+                        <%=companyNum%>
+                    </h3>
+                    <label for="toReceive">Saldo a Receber:</label>
+                    <input type="text" id="toReceive" readonly class="form-control" value="<%=company.waiting_funds.amount %>">
+
+                    <label for="available">Disponivel:</label>
+                    <input type="text" id="available" readonly class="form-control" value="<%=company.transferred.amount %>">
+
+                    <label for="totalTransferred">Total Sacado:</label>
+                    <input type="text" id="totalTransferred" readonly class="form-control" value="<%=company.available.amount %>">
+                </div>
+            </div>
+
+            <%companyNum++%>
+            <%}%>
+
+
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
