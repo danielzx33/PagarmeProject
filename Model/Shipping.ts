@@ -1,4 +1,4 @@
-import { Address } from "./Adress";
+import { Address } from "./Address";
 
 export class Shipping {
 

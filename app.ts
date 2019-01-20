@@ -7,7 +7,7 @@ import { Shipping } from "./Model/Shipping";
 import { Item } from "./Model/Item";
 import { CardTransation } from "./Model/CardTransaction";
 import { Billing } from "./Model/Billing";
-import { Address } from "./Model/Adress";
+import { Address } from "./Model/Address";
 import { Card } from "./Model/Card";
 import { SplitRule } from "./Model/SplitRule";
 import { getBalanceById } from './Script/CompanyBalance'
