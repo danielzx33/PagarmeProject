@@ -91,6 +91,7 @@ app.post("/finalizarCompra", (req, res, next) => {
             companiesBalance.push(Company)
         }).then(() => {
             res.render("Companies", { companies: companiesBalance })
+            console.log(companiesBalance)
         })
     }).catch(e => console.log(e))
 

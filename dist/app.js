@@ -64,7 +64,7 @@ app.post("/finalizarCompra", (req, res, next) => {
             .catch(error => console.log(error.response.errors));
     }
     catch (error) {
-        console.log("catch", error);
+        console.log(error);
     }
     //Retorna o Balanço
     let companiesBalance = new Array();
@@ -75,8 +75,9 @@ app.post("/finalizarCompra", (req, res, next) => {
             companiesBalance.push(Company);
         }).then(() => {
             res.render("Companies", { companies: companiesBalance });
+            console.log(companiesBalance);
         });
-    }).catch(e => console.log("companies", e));
+    }).catch(e => console.log(e));
 });
 app.listen(3000, () => {
     console.log(`Serviço online!`);
