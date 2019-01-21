@@ -12,23 +12,22 @@ const Shipping_1 = require("./Model/Shipping");
 const Item_1 = require("./Model/Item");
 const CardTransaction_1 = require("./Model/CardTransaction");
 const Billing_1 = require("./Model/Billing");
-const Address_1 = require("./Model/Address");
+const adress_1 = require("./Model/adress");
 const Card_1 = require("./Model/Card");
 const CompanyBalance_1 = require("./Script/CompanyBalance");
 const Transaction_1 = require("./Model/Transaction");
 //------config server
-const app = express_1.default();
-app.set("view engine", "ejs");
-app.set("views", path_1.default.join(__dirname, "/Views"));
-app.use(express_1.default.static(__dirname));
-app.use(body_parser_1.default.urlencoded({ extended: true }));
+const server = express_1.default();
+server.set("view engine", "ejs");
+server.set("views", path_1.default.join(__dirname, "/Views"));
+server.use(express_1.default.static(__dirname));
+server.use(body_parser_1.default.urlencoded({ extended: true }));
 //-----end config
 //-----Home page
-app.get("/", (req, res, next) => {
-    res.render("buyItem");
-    next();
+server.get("/", (req, res, next) => {
+    res.render("index");
 });
-app.post("/finalizarCompra", (req, res, next) => {
+server.post("/comprar", (req, res, next) => {
     // -----Fake db to find item
     const itens = [
         { id: 1234, name: "Zanpakutou", UnitValue: 20000 },
@@ -42,7 +41,7 @@ app.post("/finalizarCompra", (req, res, next) => {
     let finalItem = itens.find(e => e.id == parseInt(req.body.itemName));
     ///--------init values for transaction----////
     let cust = new Customer_1.Customer(req.body);
-    let multiAdress = new Address_1.Address(req.body);
+    let multiAdress = new adress_1.Address(req.body);
     let ship = new Shipping_1.Shipping(req.body, multiAdress);
     let billing = new Billing_1.Billing(req.body, multiAdress);
     let card = new Card_1.Card(req.body);
@@ -60,25 +59,17 @@ app.post("/finalizarCompra", (req, res, next) => {
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
-            .then(response => console.log(response))
-            .catch(error => console.log(error.response.errors));
+            .then(a => res.send(a))
+            .catch(erro => console.log(erro.response.errors));
+        //Retorna o Balanço
+        CompanyBalance_1.getBalanceById("re_cjqtnw06c00i5v86edkmmlwzw").then(res => console.log(res)).catch(e => console.log(e));
+        CompanyBalance_1.getBalanceById("re_cjqz7w03c015ojw6ffot0tdod").then(res => console.log(res)).catch(e => console.log(e));
     }
     catch (error) {
         console.log("catch", error);
     }
-    //Retorna o Balanço
-    let companiesBalance = new Array();
-    CompanyBalance_1.getBalanceById(Split[0].recipient_id).then(Company => {
-        companiesBalance.push(Company);
-    }).then(() => {
-        CompanyBalance_1.getBalanceById(Split[1].recipient_id).then(Company => {
-            companiesBalance.push(Company);
-        }).then(() => {
-            res.render("Companies", { companies: companiesBalance });
-        });
-    }).catch(e => console.log("companies", e));
 });
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log(`Serviço online!`);
 });
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=main.js.map

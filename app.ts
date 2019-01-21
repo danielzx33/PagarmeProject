@@ -71,7 +71,8 @@ app.post("/finalizarCompra", (req, res, next) => {
 
         pagarme.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
-            .catch(error => console.log(error));
+            .then(response => console.log(response))
+            .catch(error => console.log(error.response.errors));
 
 
     } catch (error) {
@@ -91,7 +92,7 @@ app.post("/finalizarCompra", (req, res, next) => {
         }).then(() => {
             res.render("Companies", { companies: companiesBalance })
         })
-    }).catch(e => console.log(e))
+    }).catch(e => console.log("companies",e))
 
 
 });
