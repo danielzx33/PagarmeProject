@@ -76,7 +76,7 @@ app.post("/finalizarCompra", (req, res, next) => {
 
 
     } catch (error) {
-        console.log("catch", error);
+        console.log(error);
     }
 
 
@@ -92,7 +92,7 @@ app.post("/finalizarCompra", (req, res, next) => {
         }).then(() => {
             res.render("Companies", { companies: companiesBalance })
         })
-    }).catch(e => console.log("companies",e))
+    }).catch(e => console.log(e))
 
 
 });
