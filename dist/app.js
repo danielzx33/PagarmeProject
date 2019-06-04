@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -56,7 +56,7 @@ app.post("/finalizarCompra", (req, res, next) => {
     else {
         transaction = new CardTransaction_1.CardTransation(cust, ship, item, billing, Split, card, transType);
     }
-    //--------run transaction------//
+    //--------run transaction---------//
     try {
         pagarme_1.default.client.connect({ api_key: 'ak_test_k45SfJbFXR5nlk8aqFccKC4GWAguKa' })
             .then(client => client.transactions.create(transaction))
